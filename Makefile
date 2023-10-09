@@ -15,8 +15,8 @@ clean:
 
 fclean: clean
 	@if [ -d "/home/corellan/data" ]; then \
-	rm -rf /home/corellan/data/* && \
-	echo "successfully removed all contents from /home/corellan/data"; \
+	rm -rf /home/corellan/data && \
+	echo "successfully removed all contents from /home/corellan/data and folder was removed"; \
 	fi;
 
 prune:
