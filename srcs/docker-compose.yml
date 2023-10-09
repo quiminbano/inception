@@ -5,13 +5,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $HOME/data/db
+      device: /home/corellan/data/db
       o: bind
   wp:
     driver: local
     driver_opts:
       type: none
-      device: $HOME/data/wp
+      device: /home/corellan/data/wp
       o: bind
 
 services:

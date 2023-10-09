@@ -28,8 +28,9 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     cp wp-config-sample.php wp-config.php
 
     #Setting up wordpress
+    var=1
     echo "CREATING USER IN DATABASE"
-    while true; do
+    while [ $var -lt 20 ]; do
         wp core install --url=$DOMAIN_NAME \
                         --title=$WORDPRESS_TITLE \
                         --admin_user=$WORDPRESS_DB_USER \
@@ -38,13 +39,21 @@ if [ ! -f /var/www/html/wp-config.php ]; then
                         --skip-email \
                         --allow-root
         if [ $? -eq 0 ]; then
+            echo ""
             echo "USER CREATED SUCCESSFULLY."
             break
         else
-            echo "THE CONTAINER WITH THE DATABASE IS NOT READY YET. TRYING AGAIN AFTER 5 SECONDS..."
+            echo ""
+            echo "THE CONTAINER WITH THE DATABASE IS NOT READY YET. TRYING AGAIN AFTER 5 SECONDS. TRY NUMBER $var"
+            var=$((var + 1))
             sleep 5
         fi
     done
+    if [ $var -eq 20 ]; then
+            echo ""
+            echo "TOO MANY TIMES TRYING TO CONNECT TO THE DATABASE."
+            exit 1
+    fi
     #Create a user for wordpress
     wp user create  $WORDPRESS_DB_USER \
                     $WORDPRESS_DB_USER_EMAIL \
