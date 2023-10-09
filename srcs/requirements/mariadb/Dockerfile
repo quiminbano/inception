@@ -7,10 +7,7 @@ EXPOSE 3306
 
 COPY conf/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
-COPY tools/initDatabase.sh .
-
-RUN chmod 644 /etc/my.cnf.d/mariadb-server.cnf && \
-	/bin/sh initDatabase.sh
+RUN chmod 644 /etc/my.cnf.d/mariadb-server.cnf
 
 COPY tools/runDatabase.sh .
 

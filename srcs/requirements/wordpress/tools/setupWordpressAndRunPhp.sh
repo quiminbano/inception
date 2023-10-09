@@ -28,17 +28,24 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     cp wp-config-sample.php wp-config.php
 
     #Setting up wordpress
-    echo "INSTALANDO 1"
-    wp core install --url=$DOMAIN_NAME \
-                    --title=$WORDPRESS_TITLE \
-                    --admin_user=$WORDPRESS_DB_USER \
-                    --admin_password=$WORDPRESS_DB_PASSWORD \
-                    --admin_email=$WORDPRESS_DB_USER_EMAIL \
-                    --skip-email \
-                    --allow-root
-
+    echo "CREATING USER IN DATABASE"
+    while true; do
+        wp core install --url=$DOMAIN_NAME \
+                        --title=$WORDPRESS_TITLE \
+                        --admin_user=$WORDPRESS_DB_USER \
+                        --admin_password=$WORDPRESS_DB_PASSWORD \
+                        --admin_email=$WORDPRESS_DB_USER_EMAIL \
+                        --skip-email \
+                        --allow-root
+        if [ $? -eq 0 ]; then
+            echo "USER CREATED SUCCESSFULLY."
+            break
+        else
+            echo "THE CONTAINER WITH THE DATABASE IS NOT READY YET. TRYING AGAIN AFTER 5 SECONDS..."
+            sleep 5
+        fi
+    done
     #Create a user for wordpress
-    echo "INSTALANDO 2"
     wp user create  $WORDPRESS_DB_USER \
                     $WORDPRESS_DB_USER_EMAIL \
                     --role=author \
